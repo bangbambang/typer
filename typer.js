@@ -139,27 +139,33 @@ var Typer = Backbone.Model.extend({
 		words:new Words(),
 		min_speed:1,
 		max_speed:5,
+		paused: false
 	},
-	
+
 	initialize: function() {
 		new TyperView({
 			model: this,
-			el: $(document.body)
+			el: $('#game-container')
 		});
 	},
 
 	start: function() {
-		var animation_delay = 100;
-		var self = this;
+		self = this;
+		var animation_delay = 40;
 		setInterval(function() {
-			self.iterate();
+			if(!self.get("paused")) {
+				self.iterate();
+			}
 		},animation_delay);
+		//alternatively
+		// this.iterate();
+		// window.requestAnimationFrame(this.start.bind(this));
 	},
-	
+
 	iterate: function() {
 		var words = this.get('words');
 		if(words.length < this.get('max_num_words')) {
-			var top_most_word = undefined;
+			var top_most_word;
 			for(var i = 0;i < words.length;i++) {
 				var word = words.at(i);
 				if(!top_most_word) {
@@ -168,7 +174,7 @@ var Typer = Backbone.Model.extend({
 					top_most_word = word;
 				}
 			}
-			
+
 			if(!top_most_word || top_most_word.get('y') > this.get('min_distance_between_words')) {
 				var random_company_name_index = this.random_number_from_interval(0,company_names.length - 1);
 				var string = company_names[random_company_name_index];
@@ -178,7 +184,7 @@ var Typer = Backbone.Model.extend({
 						filtered_string += string.charAt(j);
 					}
 				}
-				
+
 				var word = new Word({
 					x:this.random_number_from_interval(0,$(window).width()),
 					y:0,
@@ -188,12 +194,12 @@ var Typer = Backbone.Model.extend({
 				words.add(word);
 			}
 		}
-		
+
 		var words_to_be_removed = [];
 		for(var i = 0;i < words.length;i++) {
 			var word = words.at(i);
 			word.move();
-			
+
 			if(word.get('y') > $(window).height() || word.get('move_next_iteration')) {
 				words_to_be_removed.push(word);
 			}

@@ -10,46 +10,43 @@ var Words = Backbone.Collection.extend({
 
 var WordView = Backbone.View.extend({
 	initialize: function() {
-		$(this.el).css({position:'absolute'});
+		this.$el.css({position:'absolute'});
+		var string = this.model.get('string');
+		var letter_width = 25;
+		for(var i = 0;i < string.length;i++) {
+			this.$el
+				.append($('<div>', {class: 'chars'})
+					.css({
+						width:letter_width + 'px',
+					})
+					.text(string.charAt(i).toUpperCase()));
+		}
+
+		this.listenTo(this.model, 'remove', this.remove);
+
+		this.render();
+	},
+
+	render:function() {
 		var string = this.model.get('string');
 		var letter_width = 25;
 		var word_width = string.length * letter_width;
 		if(this.model.get('x') + word_width > $(window).width()) {
 			this.model.set({x:$(window).width() - word_width});
 		}
-		for(var i = 0;i < string.length;i++) {
-			$(this.el)
-				.append($('<div>')
-					.css({
-						width:letter_width + 'px',
-						padding:'5px 2px',
-						'border-radius':'4px',
-						'background-color':'#fff',
-						border:'1px solid #ccc',
-						'text-align':'center',
-						float:'left'
-					})
-					.text(string.charAt(i).toUpperCase()));
-		}
-		
-		this.listenTo(this.model, 'remove', this.remove);
-		
-		this.render();
-	},
-	
-	render:function() {
-		$(this.el).css({
+		this.$el.css({
 			top:this.model.get('y') + 'px',
 			left:this.model.get('x') + 'px'
 		});
 		var highlight = this.model.get('highlight');
-		$(this.el).find('div').each(function(index,element) {
+		this.$el.find('div').each(function(index,element) {
 			if(index < highlight) {
-				$(element).css({'font-weight':'bolder','background-color':'#aaa',color:'#fff'});
+				$(element).addClass('chain').removeClass('normal');
 			} else {
-				$(element).css({'font-weight':'normal','background-color':'#fff',color:'#000'});
+				$(element).addClass('normal').removeClass('chain');
 			}
 		});
+		return this;
 	}
 });
 

@@ -1,26 +1,118 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Qerja - Typer</title>
-<script type='text/javascript' src='./jquery-1.11.1.js'></script>
-<script type='text/javascript' src='./jquery-ui-1.10.4.js'></script>
-<script type='text/javascript' src='./underscore.js'></script>
-<script type='text/javascript' src='./backbone.js'></script>
-<script type='text/javascript' src='./typer.js'></script>
-<link rel='stylesheet' href='./bootstrap.css' />
-<link rel='stylesheet' href='./bootstrap-theme.css' />
-<link rel='stylesheet' href='./jquery-ui-1.10.4.css' />
-<link rel='stylesheet' href='./typer.css' />
-<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<title>Qerja - Typer</title>
+	<script type='text/javascript' src='./jquery-1.11.1.js'></script>
+	<script type='text/javascript' src='./jquery-ui-1.10.4.js'></script>
+	<script type='text/javascript' src='./underscore.js'></script>
+	<script type='text/javascript' src='./backbone.js'></script>
+	<script type='text/javascript' src='./typer.js'></script>
+	<link rel='stylesheet' href='./bootstrap.css' />
+	<link rel='stylesheet' href='./bootstrap-theme.css' />
+	<link rel='stylesheet' href='./jquery-ui-1.10.4.css' />
+	<link rel='stylesheet' href='./typer.css' />
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
 </head>
 <body>
-<script type="text/javascript">
-var company_names = ["Agung Podomoro Group","Citibank","Nokia Solution and Networks PT","Bhinneka.com","Tripatra","RCTI","TelkomSigma","Intrias Mandiri Sejati PT","Altermyth","Panin Bank","Gramedia Bookstore","Garuda Indonesia","Chevron Pacific","Darmex Agro","Bank SBI Indonesia PT","DBS Bank","UPS Cardig International PT","Tately NV","Cigna","Antam"];
+	<div class="container">
+		<div id="toolbar">
+			<div class="text-center">
+				<div class="btn-group" role="group">
+					<button id="button-play" class="btn btn-default" type="button">
+						<span class="glyphicon glyphicon-play" aria-hidden="true">
+						</span>
+					</button>
+					<button id="button-stop" class="btn btn-default" type="button">
+						<span class="glyphicon glyphicon-stop" aria-hidden="true">
+						</span>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div id="score"></div>
+		<div id="game-container"></div>
+		<div id="aturan" title="Aturan main">
+			<ul>
+				<li>Ketik kata sesuai urutan</li>
+				<li>Setiap karakter yang benar bernilai 1</li>
+				<li>Setiap kata yang benar bernilai 5</li>
+				<li>Setiap karakter yang salah bernilai -2</li>
+				<li>Klik tombol stop untuk menghentikan permainan</li>
+				<li>Klik tombol play atau tekan <strong>Escape</strong> untuk pause/play</li>
+			</ul>
+		</div>
+		<div id="gameover" title="Selesai!">
+			<p>nilai anda</p>
+			<div class="score-number">0</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var company_names = ["Agung Podomoro Group","Citibank","Nokia Solution and Networks PT","Bhinneka.com","Tripatra","RCTI","TelkomSigma","Intrias Mandiri Sejati PT","Altermyth","Panin Bank 1","Gramedia Bookstore","Garuda Indonesia","Chevron Pacific","Darmex Agro","Bank 1 SBI Indonesia PT","DBS Bank 1","UPS Cardig International PT","Tately NV","Cigna","Antam"];
+		var KEY_ENTER = 13;
+		var KEY_ESC = 27;
+		$(document).ready(function() {
+			var typer = new Typer();
+			var score = 0;
 
-$(document).ready(function() {
-	var typer = new Typer();
-	typer.start();
-});
-</script>
+			//start button & toolbar
+			$('#start').click(startGame);
+			$('#button-play').click(function () {
+				typer.get("paused") ? resumeGame() : pauseGame();
+			});
+			$('#button-stop').click(stopGame);
+
+			function startGame() {
+				typer.start();
+			};
+
+			function pauseGame() {
+				$('#button-play').children('span').removeClass('glyphicon-play').addClass('glyphicon-pause');
+				typer.set({"paused": true});
+			};
+
+			function resumeGame() {
+				$('#button-play').children('span').removeClass('glyphicon-pause').addClass('glyphicon-play');
+				typer.set({"paused": false});
+			};
+
+			function stopGame() {
+				pauseGame();
+				$("#gameover").children(".score-number").text(typer.get("score").get("score"));
+				$("#gameover").dialog( "open" );
+
+			}
+
+			$(document).keyup(function(e) {
+				if (e.keyCode === KEY_ESC) {
+					typer.get("paused") ? resumeGame() : pauseGame();
+				}
+			});
+			$( "#aturan" ).dialog({
+				closeOnEscape: false,
+				resizable: true,
+				modal: true,
+				width:500,
+				buttons: {
+					"Start": function() {
+						$(this).dialog( "close" );
+						startGame();
+					},
+				}
+			});
+			$( "#gameover" ).dialog({
+				closeOnEscape: false,
+				autoOpen: false,
+				resizable: true,
+				modal: true,
+				width:500,
+				buttons: {
+					"Restart": function() {
+						$(this).dialog( "close" );
+						window.location.reload(false);
+					},
+				}
+			});
+		});
+	</script>
 </body>
 </html>

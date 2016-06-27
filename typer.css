@@ -1,3 +1,100 @@
+/*
+	http://www.colourlovers.com/palette/92095/Giant_Goldfish
+	colors =
+	#E0E4CC | white
+	#FA6900 | orange
+	#F38630 | light orange
+	#A7DBD8 | light blue
+	#69D2E7 | blue
+*/
 body {
 	background-color:#eee;
+	display: flex;
+	flex-direction: column;
+}
+#wrapper {
+	position:fixed;
+	top:0;
+	left:0;
+	height: 100%;
+	height: 100vh;
+	width: 100%;
+	width: 100vw;
+	z-index: 0
+}
+.flex-row {
+	min-height: 100%;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#toolbar {
+	position: absolute;
+	right: 50%;
+	flex: none;
+	margin-left: auto;
+	margin-right: auto;
+	z-index: 10
+}
+#toolbar div {
+	right: -50%;
+}
+
+#score {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	height: 100%;
+	height: 100vh;
+	width: 100%;
+	width: 100vw;
+	font-size: 70vmin;
+}
+#score,
+.score-number {
+	font-weight: bold;
+	color: #A7DBD8;
+	text-align: center;
+}
+.score-number {
+	font-size: 20vmin;
+}
+.game-input {
+	border-radius: 4px;
+	position: absolute;
+	bottom: 0;
+	min-width: 80%;
+	width: 80%;
+	min-width: 80vw;
+	width: 80vw;
+	margin-bottom: 10px;
+	z-index: 10;
+}
+
+.chars {
+	padding:5px 2px;
+	border-radius:4px;
+	background-color:#fff;
+	border:1px solid #ccc;
+	text-align:center;
+	float:left;
+}
+
+.chain {
+	font-weight: bolder;
+	background-color: #A7DBD8;
+	color: #FFF
+}
+.normal {
+	font-weight: normal;
+	background-color: #fff;
+	color: #000
+}
+
+/*hide close button on dialog*/
+.ui-dialog-titlebar-close {
+    visibility: hidden;
 }

@@ -23,6 +23,7 @@ bootstrap	| [getbootstrap.com](https://getbootstrap.com/)	| [getbootstrap.com](h
 	  - firefox-aurora 49 di Archlinux
 	  - chromium 51 di Archlinux
 	  - IE 11 di Windows 7
+
 	Lancar tanpa hambatan.
 
 4. Implementasikan tombol Start, Stop, Pause, dan Resume.
